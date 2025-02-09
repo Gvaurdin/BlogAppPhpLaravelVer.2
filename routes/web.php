@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Controllers\admin\IndexController as AdminController;
-use App\Http\Controllers\Controllers\CategoriesController;
-use App\Http\Controllers\Controllers\PostsController;
+use App\Http\Controllers\admin\IndexController as AdminController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,15 +25,15 @@ Route::view('/', 'index')->name('home');
 Route::name('posts.')
     ->prefix('posts')
     ->group(function () {
-        Route::get('/', [PostsController::class, 'index'])->name('index');
-        Route::get('/{slug}', [PostsController::class, 'show'])->name('show');
-
         Route::name('categories.')
             ->prefix('categories')
             ->group(function () {
-                Route::get('/', [CategoriesController::class, 'index'])->name('index');
+                Route::get('/', [CategoriesController::class, 'index'])->name('index'); // <== Ставим выше!
                 Route::get('/{id}', [CategoriesController::class, 'show'])->name('show');
             });
+
+        Route::get('/', [PostsController::class, 'index'])->name('index');
+        Route::get('/{slug}', [PostsController::class, 'show'])->name('show'); // <== Должен быть ниже!
     });
 
 Route::name('admin.')
@@ -48,4 +48,4 @@ Route::name('admin.')
 
 Auth::routes();
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
