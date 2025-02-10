@@ -42,7 +42,9 @@ Route::name('admin.')
         Route::get('/posts', [AdminController::class, 'post'])->name('posts');
         Route::get('/categories', [AdminController::class, 'categories'])->name('categories');
         Route::get('/create', [AdminController::class, 'create'])->name('create');
-        Route::post('/store', [AdminController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('edit');
+        Route::get('/delete/{id}', [AdminController::class, 'delete'])->name('delete');
+        Route::match(['POST', 'PUT', 'DELETE'], '/store', [AdminController::class, 'store'])->name('store');
     });
 
 Auth::routes();

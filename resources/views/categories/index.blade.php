@@ -7,6 +7,19 @@
 @endsection
 
 @section('content')
-    <h1>Все категории</h1>
-    <p>Здесь будет список категорий...</p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+
+                @forelse ($categories as $category)
+
+                    <a href="{{ route('posts.categories.show', $category->id) }}">{{ $category->name }}</a><br>
+                @empty
+                    <p>Нет категорий</p>
+                @endforelse
+
+
+            </div>
+        </div>
+    </div>
 @endsection
