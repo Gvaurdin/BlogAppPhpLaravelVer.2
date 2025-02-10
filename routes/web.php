@@ -28,12 +28,11 @@ Route::name('posts.')
         Route::name('categories.')
             ->prefix('categories')
             ->group(function () {
-                Route::get('/', [CategoriesController::class, 'index'])->name('index'); // <== Ставим выше!
+                Route::get('/', [CategoriesController::class, 'index'])->name('index');
                 Route::get('/{id}', [CategoriesController::class, 'show'])->name('show');
             });
-
+        Route::get('/{id}', [PostsController::class, 'show'])->name('show');
         Route::get('/', [PostsController::class, 'index'])->name('index');
-        Route::get('/{slug}', [PostsController::class, 'show'])->name('show'); // <== Должен быть ниже!
     });
 
 Route::name('admin.')
@@ -42,10 +41,10 @@ Route::name('admin.')
         Route::get('/', [AdminController::class, 'index'])->name('index');
         Route::get('/posts', [AdminController::class, 'post'])->name('posts');
         Route::get('/categories', [AdminController::class, 'categories'])->name('categories');
-        Route::get('/addPost', [AdminController::class, 'addPostForm'])->name('addPostForm');
-        Route::post('/addPost', [AdminController::class, 'addPost'])->name('addPost');
+        Route::get('/create', [AdminController::class, 'create'])->name('create');
+        Route::post('/store', [AdminController::class, 'store'])->name('store');
     });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

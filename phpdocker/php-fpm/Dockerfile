@@ -6,5 +6,6 @@ RUN apt-get update \
         git \
         php8.2-sqlite3 \
         php8.2-xdebug \
+        sqlite3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*

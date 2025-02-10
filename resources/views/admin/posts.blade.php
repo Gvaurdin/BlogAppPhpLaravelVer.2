@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('menu')
-    @include('admin.menu')
+    @include('admin.parts.menu')
 @endsection
 
 @section('content')
     <h1>Все посты</h1>
-    <a href="{{ route('admin.addPostForm') }}" class="btn btn-success mb-3">Добавить новый пост</a>
+    <a href="{{ route('admin.create') }}" class="btn btn-success mb-3">Добавить новый пост</a>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

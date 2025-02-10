@@ -1,17 +1,23 @@
 @extends('layouts.app')
 
 @section('menu')
-    @include('menu')
+    @include('parts.menu')
 @endsection
 
 @section('content')
-    <h1>Все посты</h1>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
 
-    <ul class="list-group">
-        @foreach($posts as $post)
-            <li class="list-group-item">
-                <a href="{{ route('posts.show', ['slug' => $post['slug']]) }}">{{ $post['title'] }}</a>
-            </li>
-        @endforeach
-    </ul>
+                @forelse ($posts as $post)
+
+                    <a href="{{ route('posts.show', $post->id) }}">{{ $post->title }}</a><br>
+                @empty
+                    <p>Нет постов</p>
+                @endforelse
+
+
+            </div>
+        </div>
+    </div>
 @endsection
