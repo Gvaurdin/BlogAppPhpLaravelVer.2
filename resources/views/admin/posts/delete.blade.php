@@ -16,13 +16,13 @@
                     <div class="card-body text-center">
                         <p>Вы уверены, что хотите удалить пост <strong>{{ $post->title }}</strong>?</p>
 
-                        <form method="POST" action="{{ route('admin.store') }}">
+                        <form method="POST" action="{{ route('admin.posts.store') }}">
                             @csrf
                             @method('DELETE')
                             <input type="hidden" name="id" value="{{ $post->id }}">
 
                             <button type="submit" class="btn btn-danger">Удалить</button>
-                            <a href="{{ route('admin.posts') }}" class="btn btn-secondary">Отмена</a>
+                            <a href="{{ route('admin.posts.index') }}" class="btn btn-secondary">Отмена</a>
                         </form>
                     </div>
                 </div>

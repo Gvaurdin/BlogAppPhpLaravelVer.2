@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\admin\IndexController as AdminController;
+use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\admin\IndexController as AdminIndexController;
+use App\Http\Controllers\admin\PostController as AdminPostController;
 use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\PostsController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -31,20 +33,34 @@ Route::name('posts.')
                 Route::get('/', [CategoriesController::class, 'index'])->name('index');
                 Route::get('/{id}', [CategoriesController::class, 'show'])->name('show');
             });
-        Route::get('/{id}', [PostsController::class, 'show'])->name('show');
-        Route::get('/', [PostsController::class, 'index'])->name('index');
+        Route::get('/{post}', [PostController::class, 'show'])->name('show');
+        Route::get('/', [PostController::class, 'index'])->name('index');
     });
 
 Route::name('admin.')
     ->prefix('admin')
     ->group(function () {
-        Route::get('/', [AdminController::class, 'index'])->name('index');
-        Route::get('/posts', [AdminController::class, 'post'])->name('posts');
-        Route::get('/categories', [AdminController::class, 'categories'])->name('categories');
-        Route::get('/create', [AdminController::class, 'create'])->name('create');
-        Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('edit');
-        Route::get('/delete/{id}', [AdminController::class, 'delete'])->name('delete');
-        Route::match(['POST', 'PUT', 'DELETE'], '/store', [AdminController::class, 'store'])->name('store');
+        Route::get('/', [AdminIndexController::class, 'index'])->name('index');
+
+        Route::name('categories.')
+            ->prefix('categories')
+            ->group(function () {
+                Route::get('/', [AdminCategoryController::class, 'index'])->name('index');
+                Route::get('/create', [AdminCategoryController::class, 'create'])->name('create');
+                Route::get('/{category}', [AdminCategoryController::class, 'show'])->name('show');
+                Route::get('/edit/{category}', [AdminCategoryController::class, 'edit'])->name('edit');
+                Route::get('/delete/{category}', [AdminCategoryController::class, 'delete'])->name('delete');
+                Route::match(['POST', 'PUT', 'DELETE'], '/store', [AdminCategoryController::class, 'store'])->name('store');
+            });
+        Route::name('posts.')
+            ->prefix('posts')
+            ->group(function () {
+                Route::get('/', [AdminPostController::class, 'index'])->name('index');
+                Route::get('/create', [AdminPostController::class, 'create'])->name('create');
+                Route::get('/edit/{post}', [AdminPostController::class, 'edit'])->name('edit');
+                Route::get('/delete/{post}', [AdminPostController::class, 'delete'])->name('delete');
+                Route::match(['POST', 'PUT', 'DELETE'], '/store', [AdminPostController::class, 'store'])->name('store');
+            });
     });
 
 Auth::routes();

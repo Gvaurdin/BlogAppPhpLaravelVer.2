@@ -14,10 +14,30 @@
                     <div class="card-header">Редактирование поста</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('admin.store') }}">
+                        <form method="POST" action="{{ route('admin.posts.store') }}">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="id" value="{{ $post->id }}">
+
+                            <div class="row mb-3">
+                                <label for="name" class="col-md-4 col-form-label text-md-end">Пользователь</label>
+
+                                <div class="col-md-6">
+                                    <p>Текущий автор ID: {{ $post->user_id }}</p>
+                                    <select  class="form-select" name="user_id" id="user_id">
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}" {{ old('user_id', $post->user_id ?? '') == $user->id ? 'selected' : '' }}>
+                                                {{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('user')
+                                    <span class="invalid-feedback" role="alert">
+                                    <strong>{{$message}}</strong>
+                                </span>
+                                    @enderror
+                                </div>
+                            </div>
 
                             <div class="row mb-3">
                                 <label for="title" class="col-md-4 col-form-label text-md-end">Заголовок поста</label>

@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-    <h2>Welcome to admin page</h2>
+    <h2>Main page admin</h2>
 @endsection
-
 

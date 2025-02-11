@@ -10,9 +10,9 @@
         <a class="nav-link @if(request()->routeIs('admin.index')) active @endif" href="<?=route('admin.index')?>">Main admin page</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(request()->routeIs('admin.posts')) active @endif" href="<?=route('admin.posts')?>">Posts</a>
+        <a class="nav-link @if(request()->routeIs('admin.posts.index')) active @endif" href="<?=route('admin.posts.index')?>">Posts</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(request()->routeIs('admin.categories')) active @endif" href="<?=route('admin.categories')?>">Categories</a>
+        <a class="nav-link @if(request()->routeIs('admin.categories.index')) active @endif" href="<?=route('admin.categories.index')?>">Categories</a>
     </li>
 </ul>
