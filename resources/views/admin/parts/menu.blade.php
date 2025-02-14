@@ -15,4 +15,7 @@
     <li class="nav-item">
         <a class="nav-link @if(request()->routeIs('admin.categories.index')) active @endif" href="<?=route('admin.categories.index')?>">Categories</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link @if(request()->routeIs('admin.users.index')) active @endif" href="<?=route('admin.users.index')?>">Users</a>
+    </li>
 </ul>

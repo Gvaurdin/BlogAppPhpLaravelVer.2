@@ -13,7 +13,6 @@ services:
         working_dir: /var/www
         volumes:
             - '.:/var/www'
-            - ./database:/var/www/database:rw
             - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.2/fpm/conf.d/99-overrides.ini'
             - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.2/cli/conf.d/99-overrides.ini'
         extra_hosts:

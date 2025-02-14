@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 
 class Post extends Model
 {
-    protected $primaryKey = 'id';
-    protected $fillable = ['title', 'text','user_id'];
+    protected $fillable = ['title', 'text','user_id', 'image'];
 }
 

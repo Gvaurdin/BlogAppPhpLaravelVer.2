@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use http\Env\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 
@@ -11,10 +12,29 @@ class PostController extends Controller
     public function index()
     {
         //$posts = DB::table("posts")->get();
-        $posts = Post::query()->paginate(5);
+        $posts = Post::query()->orderBy('likes', 'desc')->paginate(5);
         return view('posts.index', [
             'posts' => $posts
         ]);
+    }
+
+    public function addLike(Post $post)
+    {
+        if($post)
+        {
+            $post->increment('likes');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Liked',
+                'likes' => $post->likes
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Post not found'
+        ],404);
     }
 
     public function show(Post $post)//string $id)

@@ -6,5 +6,6 @@
 
 @section('content')
     <h2>Main page admin</h2>
+    @include('admin.parts.messages')
 @endsection
 
