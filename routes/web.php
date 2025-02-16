@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\admin\IndexController as AdminIndexController;
 use App\Http\Controllers\admin\PostController as AdminPostController;
 use App\Http\Controllers\admin\UserController as UserController;
+use App\Http\Controllers\AuthSocialAuthController as AuthSocialAuthController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,8 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 Route::view('/', 'index')->name('home');
+Route::get('/auth/github', [AuthSocialAuthController::class, 'redirectToGitHub'])->name('github.login');
+Route::get('/auth/github/callback', [AuthSocialAuthController::class, 'handleGitHubCallback']);
 
 Route::name('posts.')
     ->middleware(['auth'])

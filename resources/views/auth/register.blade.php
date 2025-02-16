@@ -66,6 +66,9 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Register') }}
                                 </button>
+                                <a href="{{ route('github.login') }}" class="btn btn-dark">
+                                    Войти через GitHub
+                                </a>
                             </div>
                         </div>
                     </form>

@@ -69,6 +69,9 @@
                                             {{ __('Forgot Your Password?') }}
                                         </a>
                                     @endif
+                                    <a href="{{ route('github.login') }}" class="btn btn-dark">
+                                        Войти через GitHub
+                                    </a>
                                 </div>
                             </div>
                         </form>
