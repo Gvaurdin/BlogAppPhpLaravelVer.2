@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use http\Env\Response;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,59 +35,39 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function delete(Category $category)
+    public function store(CategoryRequest $request)
     {
-        return view('admin.categories.delete', ['category' => $category]);
+        try {
+            Category::create($request->validated());
+            return redirect()->route('admin.categories.index')->with('success', 'Категория успешно добавлена');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.categories.create')->with('error', 'Ошибка добавления категории: ' . $e->getMessage());
+        }
     }
 
-    public function store(Request $request)
+    public function update(CategoryRequest $request, Category $category)
     {
-        //если запрос post на создание
-        if($request->isMethod('post'))
-        {
-            //валидация
-            $validatedData = $request->validate([
-                'name' => 'required|unique:categories|min:5|max:255'
-            ]);
+        try {
+            $category->update($request->validated());
+            return redirect()->route('admin.categories.index')->with('success', 'Категория успешно обновлена');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.categories.edit', $category->id)->with('error', 'Ошибка обновления категории: ' . $e->getMessage());
+        }
+    }
 
-            try {
-                $category = Category::create($validatedData);
-            }catch (\Exception $e){
-                return redirect()->route('admin.categories.create')->with('error', 'Ошибка добавления категории '
-                    . $e->getMessage());
-            }
-
-            return redirect()->route('admin.categories.index', $category->id)->with('success','Категория успешно добавлена');
+    public function delete(Category $category)
+    {
+        try {
+            $category->delete();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Ошибка удаления категории : ' .
+                    $e->getMessage()
+            ],500);
         }
 
-        //если запрос put на редактирование
-        if($request->isMethod('put'))
-        {
-            // Валидация данных
-            $validatedData = $request->validate([
-                'name' => 'required|min:5|max:255'
-            ]);
-
-            try {
-                $category = Category::query()->find($request->id);
-                $category->update($validatedData);
-            }catch (\Exception $e){
-                return redirect()->route('admin.categories.edit')->with('error', 'Ошибка обновления категории '
-                    . $e->getMessage());
-            }
-            return redirect()->route('admin.categories.index',$category->id)->with('success','Категория успешно обновлена');
-        }
-        //если запрос на удаление
-        if($request->isMethod('delete'))
-        {
-            try {
-                $category = Category::query()->find($request->id);
-                $category->delete();
-            }catch (\Exception $e){
-                return redirect()->route('admin.categories.index')->with('error', 'Ошибка удаления категории '
-                    . $e->getMessage());
-            }
-            return redirect()->route('admin.categories.index',$category->id)->with('success','Категория успешно удалена');
-        }
+        return response()->json([
+            'success' => 'Категория успешно удалена'
+        ]);
     }
 }

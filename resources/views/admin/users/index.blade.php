@@ -13,15 +13,22 @@
     <ul class="list-group">
         @foreach($users as $user)
             <li class="list-group-item">
-                <strong>{{ $user->name }}</strong>
-                <p>{{ $user->email }}</p>
-
+                <a href="{{ route('admin.users.edit', $user) }}">{{ $user->name }}</a><br>
                 <div>
-                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">Редактировать</a>
-                    <a href="{{ route('admin.users.delete', $user->id) }}" class="btn btn-danger btn-sm">Удалить</a>
+                    <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-warning btn-sm">Редактировать</a>
+
+                    <form id="delete-form-{{ $user->id }}" action="{{ route('admin.users.delete', $user->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+                    <button type="button" class="btn btn-danger btn-sm delete-button"
+                            data-id="{{ $user->id }}"
+                            data-entity="пользователя"
+                            data-name="{{$user->name}}">Удалить</button>
                 </div>
             </li>
         @endforeach
     </ul>
 @endsection
+
 

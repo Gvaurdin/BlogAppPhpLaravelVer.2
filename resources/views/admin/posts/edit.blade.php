@@ -14,7 +14,7 @@
                     <div class="card-header">Редактирование поста</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('admin.posts.store') }}">
+                        <form method="POST" action="{{ route('admin.posts.update', $post) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="id" value="{{ $post->id }}">
@@ -67,6 +67,25 @@
                                 </div>
                             </div>
 
+                            <div class="row mb-3">
+                                <label for="image" class="col-md-4 col-form-label text-md-end">Изображение</label>
+
+                                <div class="col-md-6">
+                                    @if($post->image)
+                                        <div class="mb-2">
+                                            <img src="{{ asset('storage/' . $post->image) }}" alt="Current Image" style="width: 150px; height: auto;">
+                                            <p>Текущее изображение</p>
+                                        </div>
+                                    @endif
+
+                                    <input type="file" class="form-control" id="image" name="image">
+                                    @error('image')
+                                    <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+                                    @enderror
+                                </div>
+                            </div>
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">

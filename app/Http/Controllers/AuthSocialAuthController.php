@@ -9,32 +9,32 @@ use Laravel\Socialite\Facades\Socialite;
 
 class AuthSocialAuthController extends Controller
 {
-    /**
-     * Перенаправление пользователя на GitHub для аутентификации.
-     */
-    public function redirectToGitHub()
+
+    public function redirectToProvider(string $provider)
     {
-        return Socialite::driver('github')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
-    /**
-     * Обработка ответа от GitHub.
-     */
-    public function handleGitHubCallback()
+
+    public function handleProviderCallback(string $provider)
     {
-        $githubUser = Socialite::driver('github')->user();
+        try {
+            $socialUser = Socialite::driver($provider)->user();
 
-        $user = User::firstOrCreate(
-            ['email' => $githubUser->getEmail()],
-            [
-                'name' => $githubUser->getName(),
-                'password' => bcrypt(str()->random(16)), // Генерируем случайный пароль
-                'github_id' => $githubUser->getId(),
-            ]
-        );
+            $user = User::firstOrCreate(
+                ['email' => $socialUser->getEmail()],
+                [
+                    'name' => $socialUser->getName() ?? $socialUser->getNickname(),
+                    'password' => bcrypt(str()->random(16)),
+                    "{$provider}_id" => $socialUser->getId(),
+                ]
+            );
 
-        Auth::login($user);
+            Auth::login($user);
 
-        return redirect('/');
+            return redirect('/');
+        } catch (\Exception $e) {
+            return redirect('/login')->with('error', 'Ошибка авторизации через ' . ucfirst($provider));
+        }
     }
 }

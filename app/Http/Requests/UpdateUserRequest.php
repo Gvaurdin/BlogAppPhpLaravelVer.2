@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePostRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,17 +22,10 @@ class UpdatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|min:5|max:255',
-            'text' => 'required|min:5|max:1000',
-            'user_id' => 'required|exists:users,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'text' => 'email address'
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $this->route('user')->id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'is_admin' => 'nullable|boolean',
         ];
     }
 }

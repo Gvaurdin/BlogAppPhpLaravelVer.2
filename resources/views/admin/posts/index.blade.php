@@ -21,10 +21,20 @@
 
                 <div>
                     <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-warning btn-sm">Редактировать</a>
-                    <a href="{{ route('admin.posts.delete', $post->id) }}" class="btn btn-danger btn-sm">Удалить</a>
+
+                    <form id="delete-form-{{ $post->id }}" action="{{ route('admin.posts.delete', $post->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-danger btn-sm delete-button"
+                                data-id="{{ $post->id }}"
+                                data-entity="пост"
+                                data-name="{{$post->title}}">Удалить</button>
+                    </form>
                 </div>
             </li>
         @endforeach
     </ul>
 @endsection
+
+
 

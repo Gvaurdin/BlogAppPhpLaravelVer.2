@@ -14,7 +14,7 @@
                     <div class="card-header">Редактирование категории</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('admin.categories.store') }}">
+                        <form method="POST" action="{{ route('admin.categories.update', $category) }}">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="id" value="{{ $category->id }}">

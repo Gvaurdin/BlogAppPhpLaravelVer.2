@@ -25,8 +25,9 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 Route::view('/', 'index')->name('home');
-Route::get('/auth/github', [AuthSocialAuthController::class, 'redirectToGitHub'])->name('github.login');
-Route::get('/auth/github/callback', [AuthSocialAuthController::class, 'handleGitHubCallback']);
+
+Route::get('auth/{provider}', [AuthSocialAuthController::class, 'redirectToProvider'])->name('auth.redirect');
+Route::get('auth/{provider}/callback', [AuthSocialAuthController::class, 'handleProviderCallback'])->name('auth.callback');
 
 Route::name('posts.')
     ->middleware(['auth'])
@@ -54,20 +55,21 @@ Route::name('admin.')
             ->group(function () {
                 Route::get('/', [AdminCategoryController::class, 'index'])->name('index');
                 Route::get('/create', [AdminCategoryController::class, 'create'])->name('create');
+                Route::post('/store', [AdminCategoryController::class, 'store'])->name('store');
                 Route::get('/{category}', [AdminCategoryController::class, 'show'])->name('show');
-                Route::get('/edit/{category}', [AdminCategoryController::class, 'edit'])->name('edit');
-                Route::get('/delete/{category}', [AdminCategoryController::class, 'delete'])->name('delete');
-                Route::match(['POST', 'PUT', 'DELETE'], '/store', [AdminCategoryController::class, 'store'])->name('store');
+                Route::get('/{category}/edit', [AdminCategoryController::class, 'edit'])->name('edit');
+                Route::put('/{category}/update', [AdminCategoryController::class, 'update'])->name('update');
+                Route::delete('/{category}/delete', [AdminCategoryController::class, 'delete'])->name('delete');
             });
         Route::name('posts.')
             ->prefix('posts')
             ->group(function () {
                 Route::get('/', [AdminPostController::class, 'index'])->name('index');
                 Route::get('/create', [AdminPostController::class, 'create'])->name('create');
+                Route::post('/store', [AdminPostController::class, 'store'])->name('store');
                 Route::get('/edit/{post}', [AdminPostController::class, 'edit'])->name('edit');
-                Route::get('/delete/{post}', [AdminPostController::class, 'delete'])->name('delete');
-                Route::match(['POST', 'PUT'], '/store', [AdminPostController::class, 'store'])->name('store');
-                Route::delete('/deletePost', [AdminPostController::class, 'deletePost'])->name('deletePost');
+                Route::put('/{post}/update', [AdminPostController::class, 'update'])->name('update');
+                Route::delete('/{post}/delete', [AdminPostController::class, 'delete'])->name('delete');
             });
         Route::name('users.')
             ->prefix('users')
@@ -76,8 +78,9 @@ Route::name('admin.')
                 Route::get('/create', [UserController::class, 'create'])->name('create');
                 Route::get('/edit/{user}', [UserController::class, 'edit'])->name('edit');
                 Route::get('/delete/{user}', [UserController::class, 'delete'])->name('delete');
-                Route::match(['POST', 'PUT'], '/store', [UserController::class, 'store'])->name('store');
-                Route::delete('/deleteUser', [UserController::class, 'deleteUser'])->name('deleteUser');
+                Route::post('/store', [UserController::class, 'store'])->name('store');
+                Route::put('/{user}/update', [UserController::class, 'update'])->name('update');
+                Route::delete('/{user}/delete', [UserController::class, 'delete'])->name('delete');
             });
     });
 

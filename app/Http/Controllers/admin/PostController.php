@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -39,72 +40,62 @@ class PostController extends Controller
         ]);
     }
 
-    public function delete(Post $post)
-    {
-        return view('admin.posts.delete', ['post' => $post]);
-    }
-
     public function store(UpdatePostRequest $request)
     {
-        //если запрос post на создание
-        if($request->isMethod('post'))
-        {
-            //валидация
-            $validatedData = $request->validated();
-//            DB::table('posts')->insert([
-//                'title' => $request->input('title'),
-//                'text' => $request->input('text'),
-//                'user_id' => Auth::id(),
-//            ]);
-//            $id = DB::getPdo()->lastInsertId();
-
-            try {
-                $imagePath = null;
-                if($request->hasFile('image'))
-                {
-                    $imagePath = $request->file('image')->store('posts','public');
-                }
-                $validatedData['image'] = $imagePath;
-                $post = Post::create($validatedData);
-            }catch (\Exception $e){
-                return redirect()->route('admin.posts.create')->with('error', 'Ошибка добавления поста '
-                    . $e->getMessage());
+        try {
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('posts', 'public');
             }
 
-            return redirect()->route('admin.posts.index', $post->id)->with('success','Пост успешно добавлен');
-        }
-
-        //если запрос put на редактирование
-        if($request->isMethod('put'))
-        {
-            // Валидация данных
             $validatedData = $request->validated();
+            $validatedData['image'] = $imagePath;
 
-            //обновляем пост по id
-//            DB::table('posts')
-//                ->where('id',$request->id)
-//                ->update($request->only('title','text'));
+            $post = Post::create($validatedData);
 
-            try {
-                $post = Post::query()->find($request->id);
-                $post->update($validatedData);
-            }catch (\Exception $e){
-                return redirect()->route('admin.posts.edit')->with('error', 'Ошибка обновления поста '
-                    . $e->getMessage());
-            }
-            return redirect()->route('admin.posts.index',$post->id)->with('success','Пост успешно обновлен');
+            return redirect()->route('admin.posts.index')->with('success', 'Пост успешно добавлен');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.posts.create')->with('error', 'Ошибка добавления поста: ' . $e->getMessage());
         }
     }
 
-    public  function deletePost(Request $request)
+    public function update(UpdatePostRequest $request, Post $post)
     {
         try {
-            $post = Post::query()->find($request->id);
-            $post->delete();
-        }catch (\Exception $e){
-            return redirect()->route('admin.posts.index')->with('error', 'Ошибка удаления поста '
-                . $e->getMessage());
+            $imagePath = $post->image;
+
+            if ($request->hasFile('image')) {
+                if ($imagePath) {
+                    Storage::disk('public')->delete($imagePath);
+                }
+                $imagePath = $request->file('image')->store('posts', 'public');
+            }
+
+            $validatedData = $request->validated();
+            $validatedData['image'] = $imagePath;
+
+            $post->update($validatedData);
+
+            return redirect()->route('admin.posts.index')->with('success', 'Пост успешно обновлен');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.posts.edit', $post->id)->with('error', 'Ошибка обновления поста: ' . $e->getMessage());
         }
-        return redirect()->route('admin.posts.index',$post->id)->with('success','Пост успешно удален');
+    }
+
+    public function delete(Post $post)
+    {
+        try {
+            $post->delete();
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Ошибка удаления поста : ' .
+                    $e->getMessage()
+            ],500);
+        }
+
+        return response()->json([
+            'success' => 'Пост успешно удален'
+        ]);
     }
 }

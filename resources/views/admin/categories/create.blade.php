@@ -5,7 +5,7 @@
 @section('menu')
     @include('admin.parts.menu')
 @endsection
-
+@dump($errors)
 {{--@dump($errors)--}}
 @section('content')
     <div class="container">
@@ -18,7 +18,6 @@
                     <div class="card-body">
                         <form method="POST" action="{{ route('admin.categories.store') }}">
                             @csrf
-
                             <div class="row mb-3">
                                 <label for="name" class="col-md-4 col-form-label text-md-end">Название категории</label>
 

@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+    @include('parts.messages')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -14,7 +15,7 @@
                     <div class="card-header">Редактирование пользователя</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('admin.users.store') }}">
+                        <form method="POST" action="{{ route('admin.users.update', $user) }}">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="id" value="{{ $user->id }}">
@@ -73,7 +74,7 @@
 
                                 <div class="col-md-6">
                                     <input id="is_admin" type="checkbox" class="form-check-input @error('is_admin') is-invalid @enderror"
-                                           name="is_admin" {{ old('is_admin', $user->is_admin) ? 'checked' : '' }}>
+                                           name="is_admin" value="1" {{ old('is_admin', $user->is_admin) ? 'checked' : '' }}>
                                     @error('is_admin')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

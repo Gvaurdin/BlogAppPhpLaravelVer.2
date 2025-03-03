@@ -16,11 +16,22 @@
                 <a href="{{ route('admin.categories.show', $category->id) }}">{{ $category->name }}</a><br>
                 <div>
                     <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-warning btn-sm">Редактировать</a>
-                    <a href="{{ route('admin.categories.delete', $category) }}" class="btn btn-danger btn-sm">Удалить</a>
+
+                    <form id="delete-form-{{ $category->id }}" action="{{ route('admin.categories.delete', $category->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-danger btn-sm delete-button"
+                                data-id="{{ $category->id }}"
+                                data-entity="категорию"
+                                data-name="{{$category->name}}">Удалить</button>
+                    </form>
                 </div>
             </li>
         @endforeach
     </ul>
 @endsection
+
+
+
 
 
